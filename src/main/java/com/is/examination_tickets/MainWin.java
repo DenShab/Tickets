@@ -21,7 +21,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 // Импортируем свой класс для работы с бд
 import bd.conn;
-import net.miginfocom.swing.MigLayout;
+//import net.miginfocom.swing.MigLayout;
 /*	(Public) - поля и методы класса Index доступны для всех других объектов и классов. 
 зарезервированное слово class - говорит транслятору, что мы собираемся описать новый класс MainWin.
 Класс наследует функции элемента JFrame, который определён в стандартной библиотеке awt.
@@ -640,7 +640,7 @@ public class MainWin extends JFrame {
 		JScrollPane scrollPane_1 = new JScrollPane();
 		panel_1.add(scrollPane_1, BorderLayout.CENTER);
 		scrollPane_1.setViewportView(list_1);
-		contentPane.setLayout(new MigLayout("", "[113.00px][312.00px][265.00px,grow]", "[10px][184px][71.00px,grow]"));
+		//contentPane.setLayout(new MigLayout("", "[113.00px][312.00px][265.00px,grow]", "[10px][184px][71.00px,grow]"));
 		contentPane.add(panel, "cell 0 1,alignx left,growy");
 		contentPane.add(panel_2, "cell 0 2 2 1,alignx left,aligny top");
 		contentPane.add(panel_3, "cell 0 0 3 1,growx,aligny top");
