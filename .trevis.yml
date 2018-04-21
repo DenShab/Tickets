@@ -1,5 +1,6 @@
 language: java
-jdk: openjdk10
+jdk: 
+ - oraclejdk10
 branches:
  only:
  - master
