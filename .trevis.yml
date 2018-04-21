@@ -1,6 +1,2 @@
 language: java
-jdk: 
- - oraclejdk10
-branches:
- only:
- - master
+jdk: oraclejdk10
