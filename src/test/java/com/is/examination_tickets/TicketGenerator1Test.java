@@ -15,8 +15,6 @@ public class TicketGenerator1Test {
 //проверим соответсвует ли колличество составленных билетов заданному
 	@Test
 	public void testNumberOfTicketsTrue() {
-		// Опишем вхолдные данные
-		// questions - список вопросов
 		ArrayList<String> questions = new ArrayList<String>(
 				Arrays.asList("question_1", "question_2", "question_3", "question_4", "question_5"));
 		// numberOfTickets - колличество билетов, ожидаемое значение
