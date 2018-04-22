@@ -20,7 +20,7 @@ public class TicketGenerator1Test {
 		ArrayList<String> questions = new ArrayList<String>(
 				Arrays.asList("question_1", "question_2", "question_3", "question_4", "question_5"));
 		// numberOfTickets - колличество билетов, ожидаемое значение
-		int numberOfTickets = 10;
+		int numberOfTickets = 11;
 		// questionsInTickets - колличество вопросов в билете
 		int questionsInTickets = 2;
 		// realNumberOfTickets - колличество билетов, действительное значение
