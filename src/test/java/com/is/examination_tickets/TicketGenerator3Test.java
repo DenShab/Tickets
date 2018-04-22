@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-public class TicketGeneratorTest3 {
+public class TicketGenerator3Test {
 
 	// Проверим кажды вопрос в билете уникальный
 	// В билете не должго встретиться два или больше одинаковых вопроса

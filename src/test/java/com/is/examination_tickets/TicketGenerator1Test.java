@@ -10,7 +10,7 @@ import static org.junit.Assert.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class TicketGeneratorTest1 {
+public class TicketGenerator1Test {
 
 //проверим соответсвует ли колличество составленных билетов заданному
 	@Test

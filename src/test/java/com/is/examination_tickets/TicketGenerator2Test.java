@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
-public class TicketGeneratorTest2 {
+public class TicketGenerator2Test {
 
 	// проверим колличество вопросов в каждом билете
 	@Test

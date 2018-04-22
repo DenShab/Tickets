@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-public class TicketGeneratorTest4 {
+public class TicketGenerator4Test {
 
 	// Тест проверки
 	// Перед генерацией расчитывется сколько билетов возможно составить из
