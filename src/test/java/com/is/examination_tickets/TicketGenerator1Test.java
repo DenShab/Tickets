@@ -22,8 +22,8 @@ public class TicketGenerator1Test {
 		// questionsInTickets - колличество вопросов в билете
 		int questionsInTickets = 2;
 		// realNumberOfTickets - колличество билетов, действительное значение
-		// пока что инициализируем нулем
-		int realNumberOfTickets = 0;
+		int realNumberOfTickets;
+		// пока что инициализируем нулем		int realNumberOfTickets = 0;
 		// ticket - список билетов
 		// TicketGenerator.generator - тестируемый метод
 		ArrayList<ArrayList<String>> ticket = TicketGenerator.generator(questions, numberOfTickets, questionsInTickets);

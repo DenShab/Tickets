@@ -21,6 +21,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 // Импортируем свой класс для работы с бд
 import bd.conn;
+import net.miginfocom.swing.MigLayout;
 //import net.miginfocom.swing.MigLayout;
 /*	(Public) - поля и методы класса Index доступны для всех других объектов и классов. 
 зарезервированное слово class - говорит транслятору, что мы собираемся описать новый класс MainWin.
@@ -32,6 +33,7 @@ public class MainWin extends JFrame {
 
 
 	private static final long serialVersionUID = 1L;
+	protected static final Component D = null;
 	// Панель на которой располагаются поля и кнопки. 
 	// Панель доступна только для данного класса (private)
 	private JPanel contentPane;
@@ -54,6 +56,7 @@ public class MainWin extends JFrame {
 	private JList<String> list_1= new JList<String>();
 	/* JEditorPane -Компонент в Java Swing используется для ввода и редактирования текста, JEditorPane имеет поддержку стилей и многострочного ввода. */
 	private JEditorPane editorPane = new JEditorPane();
+	
 	/* JTextField текстовое поле. */
 	private JTextField textField;
 	private JTextField textField_1;
@@ -285,24 +288,13 @@ public class MainWin extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5)); // устанавливает контур
 		setContentPane(contentPane);// Позволяет заменить панель содержимого окна.
 		
-		JPanel panel = new JPanel();// Содержит кнопки , лейблы, комбобоксы управления дисциплинами и группами
-		JPanel panel_2 = new JPanel();// Панель содержит кнопки и editorPane для управления списком вопросов
-		JPanel panel_3 = new JPanel();// Панель содержит панель с прокруткой на которой расположен лист вопросов
+		JPanel panel = new JPanel();
 		JPanel panel_4 = new JPanel();//Панель содержит панель с прокруткой на которой расположен лист билетов
-		JPanel panel_1 = new JPanel();//Панель содержит кнопка, лейблы и текстфилды  для управления генерацией билетов.
-		JPanel panel_5 = new JPanel();
 		
 		JLabel lblNewLabel = new JLabel("Дисциплины");//определение JLabel «дисциплины»
 		JLabel label = new JLabel("Группы");//определение JLabel «Группы»
-		JLabel lblNewLabel_1 = new JLabel("Вопросы"); //определение JLabel «Вопросы»
-		JLabel label_1 = new JLabel("Билеты");//определение JLabel «Билеты»
-		JLabel label_2 = new JLabel("Колличесво билетов");//определение JLabel «Количество билетов»
-		JLabel label_3 = new JLabel("Колличесво вопросов в билете");//определение JLabel «Количество вопросов в билете»
 		//определение кнопки "Добавить ", "Сгенерировать билеты" и т.д
 		JButton button_1 = new JButton("Добавить ");
-		JButton button_5 = new JButton("Сгенерировать билеты");
-		JButton button = new JButton("Удалить");
-		JButton btnNewButton_1 = new JButton("Добавить");
 		JButton button_2 = new JButton("Удалить");
 		JButton button_3 = new JButton("Добавить");
 		JButton button_4 = new JButton("Удалить");
@@ -310,6 +302,15 @@ public class MainWin extends JFrame {
 		ArrayList<String> listDisciplin =readDisciplin(db);
 		/* записываем в listGroup названия групп*/
 		ArrayList<String> listGroup =readGroup (db,disciplin);
+		
+		editorPane.addKeyListener(new KeyAdapter() {
+			   public void keyTyped(KeyEvent e) {
+				   char c = e.getKeyChar();
+				      if ( Character.toString(c).matches("[^а-яА-Я]+") && c!=' ' && c!='-') {
+				         e.consume();  // игнорим введенные буквы и пробел
+				      }
+				   }
+				});
 		
 		/* Для того чтобы comboBox стал функциональным, необходимо присвоить обработчик событий, который будет отвечать за реагирование на события. 
 		В нашем случае требуется идентифицировать событие нажатия на переключатель – путем щелчка мышью. Поэтому будет использоваться интерфейс " HierarchyListener ", предназначенный для обработки событий " HierarchyEvent ".  Тело интерфейса указывается ниже после фигурной скобки "{". */
@@ -399,8 +400,13 @@ public class MainWin extends JFrame {
 				dialog.setVisible(true);
 				// после того как пользователь ввел необходимую информацию  в окне мы можем добавить новую записьь в бд и в comboBox
 				try {
+					//if (dialog.text!="") 
+						if(dialog.text.trim().length() != 0) 
+						
+					{
 					db.AddDisciplin(null, dialog.text);
-					comboBox.addItem(dialog.text);;
+					comboBox.addItem(dialog.text);
+					}
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -431,8 +437,12 @@ public class MainWin extends JFrame {
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);
 				try {
-					db.AddGroup(null, dialog.text);
-					comboBox_1.addItem(dialog.text);;
+					if(dialog.text.trim().length() != 0) 
+					{
+						db.AddGroup(null, dialog.text);
+						comboBox_1.addItem(dialog.text);
+					}
+					
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
@@ -449,104 +459,29 @@ public class MainWin extends JFrame {
 					}
 			}
 		});
-		// добавим функционал кнопки генерации билетов
-		button_5.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-				int numberOfTickets;
-				int questionsInTickets;
-				TicketOutputException("Билеты генерируются...");
-				
-				try {
-				//получаем из текстого поля колличесво билетов
-					Integer.parseInt(textField.getText());
-				//получаем из текстого поля колличесво вопросов в билете
-					Integer.parseInt(textField_1.getText());
-					} catch (Exception e1) {
-						TicketOutputException("Колличесво билетов или колличесво вопросов не введено!");
-					}
-				
-				ArrayList<String> questions = null;
-				ArrayList<ArrayList<String> > Ticket = null;
-				try {
-					//в questions запишем вопросы из которых будут составляться билеты
-					 questions =readQuestionTextWHERE(db,serchID(db,"Disciplin",(String)(comboBox.getSelectedItem())));
-				} catch (ClassNotFoundException e2) {
-					e2.printStackTrace();
-				} catch (SQLException e2) {
-					e2.printStackTrace();
-				}
-				//получаем из текстого поля колличесво билетов
-				 numberOfTickets =  Integer.parseInt(textField.getText());
-				//получаем из текстого поля колличесво вопросов в билете
-				 questionsInTickets = Integer.parseInt(textField_1.getText());
-				//с помощью TicketGenerator.generator генерируем билеты и записываем их в массив Ticket
-				 
-				Ticket=TicketGenerator.generator(questions, numberOfTickets, questionsInTickets);
-				
-				
-				if(Ticket!=null) {
-					try {
-						// сохраняем билеты в БД
-						SaveTicketToDb(db,Ticket);
-					} catch (ClassNotFoundException e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-					//Выводим билеты из массива на экран
-					TicketOutput(Ticket);
-					}
-					else
-					{
-						TicketOutputException("Слишком мало вопросов!");
-					}
-				}
-				
-		});
 		// в коде ниже происходит добавлениеобъектов в окно пользователя , задание формата , стиля , расположения и т.д.
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(10)
+					.addContainerGap()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
-							.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, 73, Short.MAX_VALUE)
-							.addGap(30))
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)))
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(button_1, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-					.addContainerGap())
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(button_2, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-					.addContainerGap())
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(label, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(40, Short.MAX_VALUE))
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(button_3, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-					.addContainerGap())
-				.addGroup(gl_panel.createSequentialGroup()
-					.addContainerGap()
-					.addComponent(button_4, GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
+						.addComponent(lblNewLabel, GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+						.addComponent(button_1, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+						.addComponent(button_2, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+						.addComponent(label, GroupLayout.PREFERRED_SIZE, 63, GroupLayout.PREFERRED_SIZE)
+						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+						.addComponent(button_3, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+						.addComponent(button_4, GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
 			gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup()
-					.addGap(11)
-					.addComponent(lblNewLabel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-					.addGap(6)
+					.addContainerGap()
+					.addComponent(lblNewLabel)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(button_1)
@@ -560,9 +495,24 @@ public class MainWin extends JFrame {
 					.addComponent(button_3)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(button_4)
-					.addGap(38))
+					.addContainerGap(105, Short.MAX_VALUE))
 		);
 		panel.setLayout(gl_panel);
+		panel_4.setLayout(new BorderLayout(0, 0));
+		question() ;
+		contentPane.setLayout(new MigLayout("", "[113px,fill][14.00px][337.00px][5px][10px]", "[322.00px][51.00px]"));
+		contentPane.add(panel, "flowx,cell 0 0,alignx left,growy");
+		JPanel panel_1 = new JPanel();
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setViewportView(list_1);
+		contentPane.add(panel_1, "cell 2 0,grow");
+		panel_1.setLayout(new MigLayout("", "[326px]", "[322px]"));
+		panel_1.add(scrollPane_1, "cell 0 0,grow");
+		JLabel label_1 = new JLabel("Билеты");
+		scrollPane_1.setColumnHeaderView(label_1);
+		JPanel panel_2 = new JPanel();// Панель содержит кнопки и editorPane для управления списком вопросов
+		JButton button = new JButton("Удалить");
+		JButton btnNewButton_1 = new JButton("Добавить");
 		btnNewButton_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -575,15 +525,20 @@ public class MainWin extends JFrame {
 					e1.printStackTrace();
 				}
 					String TextQuestion=editorPane.getText();
+					
 				try {
+					if(TextQuestion.trim().length() != 0) 
+					{
 					db.AddQuestion(null, idDisciplin, TextQuestion);
 					question();
+					}
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				} catch (ClassNotFoundException e1) {
 					e1.printStackTrace();
 				}
 			}
+			
 		});
 		button.addMouseListener(new MouseAdapter() {
 			@Override
@@ -628,30 +583,111 @@ public class MainWin extends JFrame {
 					.addContainerGap())
 		);
 		panel_2.setLayout(gl_panel_2);
-		panel_4.setLayout(new BorderLayout(0, 0));
+		contentPane.add(panel_2, "flowx,cell 0 1,alignx left,aligny center");
+		contentPane.add(panel_4, "flowx,cell 0 1,alignx right,aligny top");
+		JLabel lblNewLabel_1 = new JLabel("Вопросы"); //определение JLabel «Вопросы»
 		JScrollPane scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, "cell 0 0,grow");
 		scrollPane.setViewportView(list);
-		question() ;
 		list.setSelectedIndex(0);
 		scrollPane.setColumnHeaderView(lblNewLabel_1);
-		panel_4.add(scrollPane);
-		panel_1.setLayout(new BorderLayout(1000, 0));
-		panel_1.add(label_1, BorderLayout.NORTH);
-		JScrollPane scrollPane_1 = new JScrollPane();
-		panel_1.add(scrollPane_1, BorderLayout.CENTER);
-		scrollPane_1.setViewportView(list_1);
-		//contentPane.setLayout(new MigLayout("", "[113.00px][312.00px][265.00px,grow]", "[10px][184px][71.00px,grow]"));
-		contentPane.add(panel, "cell 0 1,alignx left,growy");
-		contentPane.add(panel_2, "cell 0 2 2 1,alignx left,aligny top");
-		contentPane.add(panel_3, "cell 0 0 3 1,growx,aligny top");
-		contentPane.add(panel_4, "cell 1 1,grow");
-		contentPane.add(panel_1, "cell 2 1,grow");
-		contentPane.add(panel_5, "cell 2 2,grow");
+		JPanel panel_5 = new JPanel();
+		JLabel label_2 = new JLabel("Колличесво билетов");//определение JLabel «Количество билетов»
+		JLabel label_3 = new JLabel("Колличесво вопросов в билете");//определение JLabel «Количество вопросов в билете»
+		JButton button_5 = new JButton("Сгенерировать билеты");
+		// добавим функционал кнопки генерации билетов
+		button_5.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+				if(textField.getText().trim().length() == 0) 
+				{
+					JOptionPane.showMessageDialog(D, "Вы должны ввести число!", "Ошибка", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				if(textField_1.getText().trim().length() == 0) 
+				{
+					JOptionPane.showMessageDialog(D, "Вы должны ввести число!", "Ошибка", JOptionPane.WARNING_MESSAGE);
+					return;
+				}
+				int numberOfTickets;
+				int questionsInTickets;
+				TicketOutputException("Билеты генерируются...");
+				//получаем из текстого поля колличесво билетов
+					Integer.parseInt(textField.getText());
+				//получаем из текстого поля колличесво вопросов в билете
+					Integer.parseInt(textField_1.getText());
+				ArrayList<String> questions = null;
+				ArrayList<ArrayList<String> > Ticket = null;
+				try {
+					//в questions запишем вопросы из которых будут составляться билеты
+					 questions =readQuestionTextWHERE(db,serchID(db,"Disciplin",(String)(comboBox.getSelectedItem())));
+				} catch (ClassNotFoundException e2) {
+					e2.printStackTrace();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+				//получаем из текстого поля колличесво билетов
+				 numberOfTickets =  Integer.parseInt(textField.getText());
+				//получаем из текстого поля колличесво вопросов в билете
+				 questionsInTickets = Integer.parseInt(textField_1.getText());
+				//с помощью TicketGenerator.generator генерируем билеты и записываем их в массив Ticket
+				 
+				Ticket=TicketGenerator.generator(questions, numberOfTickets, questionsInTickets);
+				
+				
+				if(Ticket!=null) {
+					try {
+						// сохраняем билеты в БД
+						SaveTicketToDb(db,Ticket);
+					} catch (ClassNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					//Выводим билеты из массива на экран
+					TicketOutput(Ticket);
+					}
+					else
+					{
+						JOptionPane.showMessageDialog(D, "Слишком мало вопросов!", "Ошибка", JOptionPane.WARNING_MESSAGE);
+						try {
+							ticket();
+						} catch (ClassNotFoundException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (SQLException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						//TicketOutputException("Слишком мало вопросов!");
+					}
+				}
+				
+		});
 		textField = new JTextField();
 		textField.setColumns(10);
-		//JOptionPane.showMessageDialog(D, "Вы должны ввести число!", "Ошибка", JOptionPane.WARNING_MESSAGE);
+		
 		textField_1 = new JTextField();
 		textField_1.setColumns(10);
+		
+		textField.addKeyListener(new KeyAdapter() {
+			   public void keyTyped(KeyEvent e) {
+				   char c = e.getKeyChar();
+				      if ( Character.toString(c).matches("[^0-9]+") ) {
+				         e.consume();  // игнорим введенные буквы и пробел
+				      }
+				   }
+				});
+		textField_1.addKeyListener(new KeyAdapter() {
+			   public void keyTyped(KeyEvent e) {
+				   char c = e.getKeyChar();
+				      if ( Character.toString(c).matches("[^0-9]+")) {
+				         e.consume();  // игнорим введенные буквы и пробел
+				      }
+				   }
+				});
+
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);
 		gl_panel_5.setHorizontalGroup(
 			gl_panel_5.createParallelGroup(Alignment.LEADING)
@@ -685,6 +721,7 @@ public class MainWin extends JFrame {
 					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		panel_5.setLayout(gl_panel_5);
+		contentPane.add(panel_5, "cell 2 1,grow");
 		
 	}
 }
