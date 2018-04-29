@@ -34,7 +34,7 @@ protected static final Component D = null;
 	 *  JTextPane()- конструктор класса */
 	String text="";
 	/* Создание переменной типа строка и запись в нее пустой строки*/
-	public FrameAddDialog() { /*конструкто класса */
+	public FrameAddDialog(final String s) { /*конструкто класса */
 		
 		setTitle("Добавление"); /*Установим запись "Добавление" в шапку окна*/
 		setBounds(100, 100, 380, 151);/* Установка размера рабочего пространства */
@@ -61,9 +61,16 @@ protected static final Component D = null;
 			textPane.addKeyListener(new KeyAdapter() {
 				   public void keyTyped(KeyEvent e) {
 					   char c = e.getKeyChar();
+					   if(s=="Дисциплина") {
 					      if ( Character.toString(c).matches("[^а-яА-Я]+") && c!=' ' && c!='-') {
 					         e.consume();  // игнорим введенные буквы и пробел
 					      }
+					   }
+					   if(s=="Группа") {
+						      if ( Character.toString(c).matches("[^а-яА-Я0-9]+") && c!=' ' && c!='-') {
+						         e.consume();  // игнорим введенные буквы и пробел
+						      }
+						   }
 					   }
 					});
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);

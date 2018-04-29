@@ -393,7 +393,7 @@ public class MainWin extends JFrame {
 		button_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//создаем диалоговое окно
-				FrameAddDialog dialog = new FrameAddDialog();
+				FrameAddDialog dialog = new FrameAddDialog("Дисциплина");
 				//задаем окну стандартные возможности свернуть и закрыть
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				//делаем окно видимым
@@ -433,7 +433,7 @@ public class MainWin extends JFrame {
 		button_3.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				FrameAddDialog dialog = new FrameAddDialog();
+				FrameAddDialog dialog = new FrameAddDialog("Группа");
 				dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 				dialog.setVisible(true);
 				try {
