@@ -53,16 +53,8 @@ public class StartWin extends JFrame {
 		JButton button = new JButton("Преподователь");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				MainWin frame2 = null;
-				try {
-					frame2 = new MainWin();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} /* Созжаем объект типа MainWin, это окно в котором будет выполняться работа */
+				PassWin frame2 = null;
+				frame2 = new PassWin();
 				frame2.setVisible(true); 
 				frame.setVisible(false);
 			}
