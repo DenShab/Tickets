@@ -80,7 +80,7 @@ public class MainWin extends JFrame {
 	    	return res;
 	    	}
 	/* метод serchID для поиска id записи «d» в таблице «table», возвращает целочисленное значение. */
-	int serchID(conn db,String tabel,String d) throws ClassNotFoundException, SQLException 
+	static int serchID(conn db,String tabel,String d) throws ClassNotFoundException, SQLException 
 	{
 		// переменная типа int в которую запишем найденый id
 		int id = 0;
@@ -302,11 +302,18 @@ public class MainWin extends JFrame {
 		ArrayList<String> listDisciplin =readDisciplin(db);
 		/* записываем в listGroup названия групп*/
 		ArrayList<String> listGroup =readGroup (db,disciplin);
+		editorPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				editorPane.setText("");
+			}
+		});
+		editorPane.setText("Введите вопрос тут");
 		
 		editorPane.addKeyListener(new KeyAdapter() {
 			   public void keyTyped(KeyEvent e) {
 				   char c = e.getKeyChar();
-				      if ( Character.toString(c).matches("[^а-яА-Я]+") && c!=' ' && c!='-') {
+				      if ( Character.toString(c).matches("[^а-яА-Я]+") && c!=' ' && c!='-'&& c!='?') {
 				         e.consume();  // игнорим введенные буквы и пробел
 				      }
 				   }
@@ -559,27 +566,67 @@ public class MainWin extends JFrame {
 				}
 			}
 		});
+		
+		JLabel label_4 = new JLabel("Вопросы");
+		
+		JButton btnNewButton = new JButton("Удалить все вопросы");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					int idDisciplin=serchID(db,"Disciplin",(String)(comboBox.getSelectedItem()));
+					db.DelQuestionD(idDisciplin);
+				} catch (SQLException e2) {
+					// TODO Auto-generated catch block
+					e2.printStackTrace();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				
+				try {
+					question();
+					ticket();
+				} catch (ClassNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 		GroupLayout gl_panel_2 = new GroupLayout(panel_2);
 		gl_panel_2.setHorizontalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
-					.addContainerGap()
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnNewButton_1, GroupLayout.PREFERRED_SIZE, 92, GroupLayout.PREFERRED_SIZE)
-						.addComponent(button, GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
-					.addGap(18)
-					.addComponent(editorPane, GroupLayout.PREFERRED_SIZE, 310, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addGap(3)
+							.addComponent(label_4, GroupLayout.PREFERRED_SIZE, 78, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel_2.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
+								.addComponent(btnNewButton_1, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(button, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(btnNewButton, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(editorPane, GroupLayout.PREFERRED_SIZE, 243, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 		);
 		gl_panel_2.setVerticalGroup(
 			gl_panel_2.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel_2.createSequentialGroup()
-					.addContainerGap()
+					.addComponent(label_4)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-						.addComponent(editorPane, GroupLayout.DEFAULT_SIZE, 52, Short.MAX_VALUE)
+						.addComponent(editorPane, GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
 						.addGroup(gl_panel_2.createSequentialGroup()
 							.addComponent(btnNewButton_1)
 							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(button)))
+							.addComponent(button)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnNewButton)))
 					.addContainerGap())
 		);
 		panel_2.setLayout(gl_panel_2);
@@ -677,6 +724,7 @@ public class MainWin extends JFrame {
 				      if ( Character.toString(c).matches("[^0-9]+") ) {
 				         e.consume();  // игнорим введенные буквы и пробел
 				      }
+				      
 				   }
 				});
 		textField_1.addKeyListener(new KeyAdapter() {
@@ -685,7 +733,17 @@ public class MainWin extends JFrame {
 				      if ( Character.toString(c).matches("[^0-9]+")) {
 				         e.consume();  // игнорим введенные буквы и пробел
 				      }
+				      else {
+				    	  if (!(textField_1.getText()+c).equals("")) {
+				    	  int A=Integer.parseInt(textField_1.getText()+c);
+				    	  int B=list.getModel().getSize();
+				      if ( A > B) {
+				    	  JOptionPane.showMessageDialog(D, "Слишком мало вопросов!", "Ошибка", JOptionPane.WARNING_MESSAGE);
+				    	  e.consume();
+					     }
+				      }
 				   }
+			   }
 				});
 
 		GroupLayout gl_panel_5 = new GroupLayout(panel_5);

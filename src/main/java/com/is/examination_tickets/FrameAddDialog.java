@@ -18,6 +18,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class FrameAddDialog extends JDialog {
 /* public - модификатор доступа. Класс FrameAddDialog доступен везде
@@ -77,6 +79,10 @@ protected static final Component D = null;
 			{
 				/* добавим кнопки на панель */
 				JButton okButton = new JButton("OK");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
 				/* Инициализация кнопкп "ОК" */
 				okButton.addMouseListener(new MouseAdapter() {
 					@Override

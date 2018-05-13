@@ -100,6 +100,16 @@ public class conn {
 					  statmt.execute("DELETE FROM Tickets WHERE IdQuestion="+s+";");
 					  System.out.println("Запись Question удалена ");
 				}
+				
+				public void DelQuestionD(Integer IdDisciplin) throws SQLException
+				{
+					  resSet =  statmt.executeQuery("SELECT * FROM Questions WHERE IdDiscipline="+IdDisciplin+";");
+					  String s=resSet.getString("IdQuestion");
+					  statmt.execute("DELETE FROM Questions WHERE"
+					  		+ " IdDiscipline="+IdDisciplin+";");
+					  statmt.execute("DELETE FROM Tickets WHERE IdDiscipline="+IdDisciplin+";");
+					  System.out.println("Запись Question удалена ");
+				}
 				//Удаление записи из таблици Tickets
 				public void DelTicket(Integer IdTicket) throws SQLException
 				{
