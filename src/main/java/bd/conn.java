@@ -29,7 +29,7 @@ public class conn {
 		 //Загружаем драйвер
 		   Class.forName("org.sqlite.JDBC");
 		 //Создаём соединение
-		  conn = DriverManager.getConnection("jdbc:sqlite:src/main/resources/dbBilet.s3db");
+		  conn = DriverManager.getConnection("jdbc:sqlite:dbBilet.s3db");
 		   System.out.println("База Подключена!");
 		   statmt = conn.createStatement();
 	   }
