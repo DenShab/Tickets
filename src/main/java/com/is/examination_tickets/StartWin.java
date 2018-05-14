@@ -3,9 +3,12 @@ package com.is.examination_tickets;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
+import java.awt.Component;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
@@ -16,6 +19,7 @@ import java.awt.event.ActionEvent;
 
 public class StartWin extends JFrame {
 
+	protected static final Component D = null;
 	JFrame frame;
 
 	/**
@@ -53,9 +57,8 @@ public class StartWin extends JFrame {
 		JButton button = new JButton("Преподователь");
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				PassWin frame2 = null;
-				frame2 = new PassWin();
-				frame2.setVisible(true); 
+				String[] args = null;
+				PassWin.main(args);; 
 				frame.setVisible(false);
 			}
 		});
@@ -71,8 +74,10 @@ public class StartWin extends JFrame {
 				} catch (ClassNotFoundException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
+					JOptionPane.showMessageDialog(D, e1, "Ошибка", JOptionPane.WARNING_MESSAGE);
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(D, e1, "Ошибка", JOptionPane.WARNING_MESSAGE);
 					e1.printStackTrace();
 				}
 				frame2.frame.setVisible(true);

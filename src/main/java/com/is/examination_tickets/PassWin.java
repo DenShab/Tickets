@@ -77,9 +77,11 @@ public class PassWin extends JDialog {
 						} catch (ClassNotFoundException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
+							JOptionPane.showMessageDialog(D, e1, "Ошибка", JOptionPane.WARNING_MESSAGE);
 						} catch (SQLException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
+							JOptionPane.showMessageDialog(D, e1, "Ошибка", JOptionPane.WARNING_MESSAGE);
 						} /* Созжаем объект типа MainWin, это окно в котором будет выполняться работа */
 						frame2.setVisible(true); 
 						setVisible(false);
